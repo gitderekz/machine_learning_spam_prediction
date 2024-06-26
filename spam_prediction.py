@@ -1,4 +1,6 @@
 # import packages
+import os
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -30,10 +32,20 @@ model = MultinomialNB()
 model.fit(x_train_count, y_train)
 
 # store model
-pk.dump(model,open('model.pkl','wb'))
+# pk.dump(model,open('model.pkl','wb'))
+peak = 0.9863603732950467
+score = model.score(cv.transform(x_test), y_test)
+print('CURRENT SCORE: ', score)
+if score > peak:
+    print('score > peak: ', score)
+    with open('model.pkl', 'wb') as model_file:
+        pk.dump((model, cv), model_file)
 
 # use stored model
-model = pk.load(open('model.pkl','rb'))
+# model = pk.load(open('model.pkl','rb'))
+if os.path.exists('model.pkl'):
+    with open('model.pkl', 'rb') as model_file:
+        model, cv = pk.load(model_file)
 
 # pre-test
 valid_email = ['niaje chaliangu?']
